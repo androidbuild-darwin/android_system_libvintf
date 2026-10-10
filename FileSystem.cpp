@@ -74,7 +74,11 @@ status_t FileSystemImpl::modifiedTime(const std::string& path, TimeSpec* mtime,
         }
         return saved_errno == 0 ? UNKNOWN_ERROR : -saved_errno;
     }
+#ifdef __APPLE__
+    *mtime = stat_buf.st_mtimespec;
+#else
     *mtime = stat_buf.st_mtim;
+#endif
     return OK;
 }
 
